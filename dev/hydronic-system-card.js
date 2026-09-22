@@ -3,7 +3,7 @@ var HydronicSystemCard=function(t){"use strict";function e(t,e,s,i){var a,r=argu
            viewBox="0 0 240 180" x="${t.x}" y="${t.y}" width="${240*t.s}" height="${180*t.s}"
            data-kind="${t.name}"
            data-mode="${s.mode||"off"}"
-           data-state="${s.state||"active"}"
+           data-state="${s.state||("off"===s.mode?"off":"active")}"
            data-running="${s.running?"true":"false"}"
            data-position="${s.position||"unknown"}"
            data-direction="forward"
