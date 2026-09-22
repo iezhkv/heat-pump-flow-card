@@ -217,6 +217,24 @@ export interface HeatPumpFlowCardConfig extends LovelaceCardConfig {
     logo_url?: string;            // Logo URL (displayed above HVAC load box)
   };
 
+  // Second Distribution Circuit Configuration (e.g. underfloor loop fed through a mixing valve)
+  hvac_2?: {
+    enabled?: boolean;            // Show the second circuit (default: false)
+    thermal_entity?: string;      // Thermal power consumed (W)
+    flow_rate_entity?: string;    // Flow rate of the second circuit (L/min)
+    supply_temp_entity?: string;  // Supply temperature after the mixing valve
+    return_temp_entity?: string;  // Return temperature
+    name?: string;
+    logo_url?: string;            // Logo URL (displayed above the second load box)
+  };
+
+  // Distribution Diverter Valve Configuration (selects which circuit the buffer feeds)
+  hvac_valve?: {
+    enabled?: boolean;            // Show the diverter valve (default: true when hvac_2 is enabled)
+    state_entity?: string;        // off = circuit 1 is fed, on = circuit 2 is fed
+    name?: string;                // Label under the valve (default: "SV2")
+  };
+
   // House/Building Performance Configuration
   house?: {
     heat_loss_kw_entity?: string;                    // Real-time heat loss (kW)
@@ -275,6 +293,8 @@ export interface HeatPumpFlowCardConfig extends LovelaceCardConfig {
     hp_return?: string;       // Heat pump return label (default: "HP Return")
     hvac_supply?: string;     // HVAC supply label (default: "HVAC Supply")
     hvac_return?: string;     // HVAC return label (default: "HVAC Return")
+    hvac_2?: string;          // Second circuit box label (default: "ZONE 2")
+    hvac_valve?: string;      // Diverter valve label (default: "SV2")
     buffer_tank?: string;     // Buffer tank label (default: "BUFFER TANK")
     dhw_tank?: string;        // DHW tank label (default: "DHW")
     power_in?: string;        // Power in label (default: "Power In")
@@ -313,6 +333,14 @@ export interface HeatPumpFlowCardConfig extends LovelaceCardConfig {
       hvac_return?: {
         enabled?: boolean;            // Enable indicator at HVAC return (default: true)
         entity?: string;              // Entity override (uses hvac.return_temp_entity if not set)
+      };
+      hvac2_supply?: {
+        enabled?: boolean;            // Enable indicator at the second circuit supply (default: true)
+        entity?: string;              // Entity override (uses hvac_2.supply_temp_entity if not set)
+      };
+      hvac2_return?: {
+        enabled?: boolean;            // Enable indicator at the second circuit return (default: true)
+        entity?: string;              // Entity override (uses hvac_2.return_temp_entity if not set)
       };
       dhw_inlet?: {
         enabled?: boolean;            // Enable indicator at DHW inlet (default: true)
@@ -396,6 +424,11 @@ export interface HVACState {
   flowRate: number;
   supplyTemp: number;
   returnTemp: number;
+}
+
+export interface HVACValveState {
+  enabled: boolean;          // Is the diverter valve shown
+  isCircuit2: boolean;       // true = circuit 2 is being fed, false = circuit 1
 }
 
 export interface DHWTankState {

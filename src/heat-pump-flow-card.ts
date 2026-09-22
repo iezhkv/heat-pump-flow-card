@@ -1,7 +1,7 @@
 import { LitElement, html, css, PropertyValues, svg } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import { HomeAssistant, LovelaceCardEditor } from 'custom-card-helpers';
-import { HeatPumpFlowCardConfig, HeatPumpState, BufferTankState, HVACState, DHWTankState, DHWTank2State, G2ValveState, AuxHeaterState, HousePerformanceState } from './types';
+import { HeatPumpFlowCardConfig, HeatPumpState, BufferTankState, HVACState, HVACValveState, DHWTankState, DHWTank2State, G2ValveState, AuxHeaterState, HousePerformanceState } from './types';
 import { CARD_VERSION, BUILD_TIMESTAMP } from './const';
 import { cardStyles } from './styles';
 
@@ -106,6 +106,8 @@ export class HeatPumpFlowCard extends LitElement {
           buffer_return: { enabled: true },
           hvac_supply: { enabled: true },
           hvac_return: { enabled: true },
+          hvac2_supply: { enabled: true },
+          hvac2_return: { enabled: true },
           dhw_inlet: { enabled: true },
           dhw_outlet: { enabled: true },
           dhw_tank_inlet: { enabled: true },
@@ -322,6 +324,25 @@ export class HeatPumpFlowCard extends LitElement {
       flowRate: this.getStateValue(cfg.flow_rate_entity) || 0,
       supplyTemp: this.getStateValue(cfg.supply_temp_entity) || 0,
       returnTemp: this.getStateValue(cfg.return_temp_entity) || 0,
+    };
+  }
+
+  private getHVAC2State(): HVACState {
+    const c = this.config.hvac_2 || {};
+    return {
+      thermal: this.getStateValue(c.thermal_entity) || 0,
+      flowRate: this.getStateValue(c.flow_rate_entity) || 0,
+      supplyTemp: this.getStateValue(c.supply_temp_entity) || 0,
+      returnTemp: this.getStateValue(c.return_temp_entity) || 0,
+    };
+  }
+
+  private getHVACValveState(): HVACValveState {
+    const c = this.config.hvac_valve || {};
+    const raw = c.state_entity ? this.getStateString(c.state_entity) : undefined;
+    return {
+      enabled: !!this.config.hvac_2?.enabled && c.enabled !== false,
+      isCircuit2: raw === undefined ? false : ['on', 'true', 'open', 'active'].includes(String(raw).toLowerCase()),
     };
   }
 
@@ -849,6 +870,13 @@ export class HeatPumpFlowCard extends LitElement {
     // Calculate pipe colors based on temperature delta
     const hpPipeColors = this.getPipeColors(hpState.outletTemp, hpState.inletTemp, hpState.flowRate);
     const hvacPipeColors = this.getPipeColors(bufferState.supplyTemp, hvacState.returnTemp, hvacState.flowRate);
+    const hvac2State = this.getHVAC2State();
+    const hvacValveState = this.getHVACValveState();
+    const circuit1Dim = hvacValveState.enabled && hvacValveState.isCircuit2 ? '0.25' : '1';
+    const circuit2Dim = hvacValveState.enabled && !hvacValveState.isCircuit2 ? '0.25' : '1';
+    const hvac2PipeColors = this.getPipeColors(hvac2State.supplyTemp, hvac2State.returnTemp, hvac2State.flowRate);
+    const hvac2SupplyColor = hvac2PipeColors.hotPipe;
+    const hvac2ReturnColor = hvac2PipeColors.coldPipe;
 
     // Extract individual pipe colors
     const hpOutletColor = hpPipeColors.hotPipe;
@@ -1170,6 +1198,7 @@ export class HeatPumpFlowCard extends LitElement {
                   stroke="${hvacReturnColor}"
                   stroke-width="12"
                   fill="none"
+                  opacity="${circuit1Dim}"
                   stroke-linecap="butt"/>
 
             <!-- Pipe: Buffer to HVAC (hot supply) - 10px gap from buffer - ON TOP -->
@@ -1178,7 +1207,51 @@ export class HeatPumpFlowCard extends LitElement {
                   stroke="${bufferSupplyColor}"
                   stroke-width="12"
                   fill="none"
+                  opacity="${circuit1Dim}"
                   stroke-linecap="butt"/>
+
+            <!-- Second distribution circuit: branch off the buffer supply, through a mixing valve -->
+            ${this.config.hvac_2?.enabled ? svg`
+              <!-- Return leg of circuit 2 (behind) -->
+              <path id="hvac2-to-buffer-path"
+                    d="M 620 360 L 520 360 L 520 220"
+                    stroke="${hvac2ReturnColor}"
+                    stroke-width="12"
+                    fill="none"
+                    opacity="${circuit2Dim}"
+                    stroke-linejoin="round"
+                    stroke-linecap="butt"/>
+
+              <!-- Supply leg of circuit 2 (on top) -->
+              <path id="buffer-to-hvac2-path"
+                    d="M 560 180 L 560 320 L 620 320"
+                    stroke="${hvac2SupplyColor}"
+                    stroke-width="12"
+                    fill="none"
+                    opacity="${circuit2Dim}"
+                    stroke-linejoin="round"
+                    stroke-linecap="butt"/>
+
+              <!-- Diverter valve selecting which circuit the buffer feeds -->
+              ${hvacValveState.enabled ? svg`
+                <g id="hvac-valve" transform="translate(560, 180)">
+                  <circle r="15" fill="#34495e" stroke="#2c3e50" stroke-width="2"/>
+                  <path d="M -15 0 L 0 0" stroke="${bufferSupplyColor}"
+                        stroke-width="6" fill="none" stroke-linecap="round"/>
+                  <path d="M 0 0 L 15 0"
+                        stroke="${hvacValveState.isCircuit2 ? '#7f8c8d' : bufferSupplyColor}"
+                        stroke-width="6" fill="none" stroke-linecap="round"/>
+                  <path d="M 0 0 L 0 15"
+                        stroke="${hvacValveState.isCircuit2 ? hvac2SupplyColor : '#7f8c8d'}"
+                        stroke-width="6" fill="none" stroke-linecap="round"/>
+                  <circle r="4" fill="#ecf0f1"/>
+                  <text x="0" y="-22" text-anchor="middle" fill="#95a5a6"
+                        font-size="9" font-weight="bold">
+                    ${this.config.labels?.hvac_valve || this.config.hvac_valve?.name || 'SV2'}
+                  </text>
+                </g>
+              ` : ''}
+            ` : ''}
 
             <!-- Animated Flow Overlays (shimmer effect on pipes) -->
             <!-- Note: Adding tiny kinks to straight paths for gradient rendering -->
@@ -2339,7 +2412,7 @@ export class HeatPumpFlowCard extends LitElement {
             ` : ''}
 
             <!-- HVAC Load (right side) -->
-            <g id="hvac-load" transform="translate(630, 150)" filter="url(#entity-shadow)">
+            <g id="hvac-load" transform="translate(630, 150)" opacity="${circuit1Dim}" filter="url(#entity-shadow)">
               <!-- Logo centered above HVAC box -->
               ${this.config.hvac?.logo_url ? svg`
                 <image
@@ -2380,6 +2453,35 @@ export class HeatPumpFlowCard extends LitElement {
                 </text>
               `}
             </g>
+
+            <!-- Second distribution circuit load box -->
+            ${this.config.hvac_2?.enabled ? svg`
+              <g id="hvac2-load" transform="translate(630, 290)" opacity="${circuit2Dim}" filter="url(#entity-shadow)">
+                ${this.config.hvac_2?.logo_url ? svg`
+                  <image x="50" y="-25" width="20" height="20"
+                         href="${this.config.hvac_2.logo_url}" opacity="0.9"
+                         preserveAspectRatio="xMidYMid meet" />
+                ` : ''}
+                <rect width="120" height="100" rx="10" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
+                <text x="60" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="bold">
+                  ${this.config.labels?.hvac_2 || this.config.hvac_2?.name || 'ZONE 2'}
+                </text>
+                ${this.config.hvac_2?.thermal_entity ? svg`
+                  <g style="cursor: pointer;" @click="${(e: Event) => this.handleTemperatureClick(e, this.config.hvac_2!.thermal_entity!)}">
+                    <text x="60" y="55" text-anchor="middle" fill="#e74c3c" font-size="20" font-weight="bold">
+                      ${this.formatValue(hvac2State.thermal, 0)} W
+                    </text>
+                  </g>
+                ` : ''}
+                ${this.config.hvac_2?.flow_rate_entity ? svg`
+                  <g style="cursor: pointer;" @click="${(e: Event) => this.handleTemperatureClick(e, this.config.hvac_2!.flow_rate_entity!)}">
+                    <text x="60" y="85" text-anchor="middle" fill="white" font-size="10">
+                      ${this.formatValue(hvac2State.flowRate, 1)} ${this.getStateUnit(this.config.hvac_2?.flow_rate_entity) || 'L/m'}
+                    </text>
+                  </g>
+                ` : ''}
+              </g>
+            ` : ''}
 
             <!-- Auxiliary Heater - Glowing cylinder with animated pulsing glow -->
             <!-- Centered between HP outlet (180) and G2 inlet (328) = 254 -->
@@ -2507,6 +2609,24 @@ export class HeatPumpFlowCard extends LitElement {
               this.config.temperature_status?.points?.buffer_return,
               hvacReturnColor
             )}
+
+            <!-- Circuit 2 supply / return indicators -->
+            ${this.config.hvac_2?.enabled ? svg`
+              ${this.renderTemperatureIndicator(
+                615, 320,
+                this.config.temperature_status?.points?.hvac2_supply?.entity || this.config.hvac_2?.supply_temp_entity,
+                hvac2State.supplyTemp,
+                this.config.temperature_status?.points?.hvac2_supply,
+                hvac2SupplyColor
+              )}
+              ${this.renderTemperatureIndicator(
+                615, 360,
+                this.config.temperature_status?.points?.hvac2_return?.entity || this.config.hvac_2?.return_temp_entity,
+                hvac2State.returnTemp,
+                this.config.temperature_status?.points?.hvac2_return,
+                hvac2ReturnColor
+              )}
+            ` : ''}
 
             <!-- HVAC return (on return pipe at y=220, near HVAC load) -->
             ${this.renderTemperatureIndicator(
