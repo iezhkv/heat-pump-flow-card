@@ -293,6 +293,7 @@ export interface HeatPumpFlowCardConfig extends LovelaceCardConfig {
     hp_return?: string;       // Heat pump return label (default: "HP Return")
     hvac_supply?: string;     // HVAC supply label (default: "HVAC Supply")
     hvac_return?: string;     // HVAC return label (default: "HVAC Return")
+    hvac?: string;            // First circuit box label (default: "HVAC LOAD")
     hvac_2?: string;          // Second circuit box label (default: "ZONE 2")
     hvac_valve?: string;      // Diverter valve label (default: "SV2")
     buffer_tank?: string;     // Buffer tank label (default: "BUFFER TANK")

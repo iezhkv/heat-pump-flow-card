@@ -2427,7 +2427,7 @@ export class HeatPumpFlowCard extends LitElement {
 
               <rect width="120" height="100" rx="10" fill="#2c3e50" stroke="#34495e" stroke-width="2"/>
               <text x="60" y="30" text-anchor="middle" fill="white" font-size="12" font-weight="bold">
-                HVAC LOAD
+                ${this.config.labels?.hvac || this.config.hvac?.name || 'HVAC LOAD'}
               </text>
               ${this.config.hvac?.thermal_entity ? svg`
                 <g style="cursor: pointer;" @click="${(e: Event) => this.handleTemperatureClick(e, this.config.hvac!.thermal_entity!)}">
