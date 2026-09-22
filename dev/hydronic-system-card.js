@@ -16,70 +16,70 @@ var HydronicSystemCard=function(t){"use strict";function e(t,e,s,i){var a,r=argu
          data-running="${i?"true":"false"}" data-direction="forward">
         <path class="${e}" d="${t}"/>
         <path class="flow" d="${t}"/>
-      </g>`}caption(t,e,s,i="middle"){return I`<text class="caption" x="${t}" y="${e}" text-anchor="${i}">${s}</text>`}sensor(t,e,s,i,a,r){if(!i)return I``;const l=.42,n=this.symbol({name:"pipe-temperature-sensor",x:t-50.4,y:e-55.86,s:l},`sensor-${i.replace(/\W/g,"_")}`,{mode:a,state:this.available(i)?"active":"unavailable",temp:s,entity:i,label:i});return I`<g class="pipe-sensor ${"return"===r?"on-return":""}">${n}</g>`}updated(t){this.renderRoot.querySelectorAll("svg.hp-part[data-temp]").forEach(t=>{const e=t.querySelector('[data-value="temperature"]');e&&(e.textContent=t.dataset.temp||"—")})}render(){if(!this.config||!this.hass)return B``;const t="pump"===this.config.view&&this.config.heat_pump?[this.config.heat_pump]:this.config.heat_pumps||[],e=t[0],s=t[1],i=!(!e?.dhw_valve_entity||!this.config.dhw_tank),a=this.config.distribution,r=a?.circuits||[],l=this.modeOf(e),n=this.modeOf(s),c=this.stateOf(e),o=this.stateOf(s),h="active"===c&&this.on(e?.running_entity),p="active"===o&&this.on(s?.running_entity),d=i?this.on(e.dhw_valve_entity)?"b":"a":"unknown",u=a?.valve_entity?this.on(a.valve_entity)?"b":"a":"unknown",y="b"!==d,f=y&&h?l:p?n:y&&"off"!==l?l:n,x=y&&h||p,m=this.num(this.config.buffer?.temp_entity),g=x?f:void 0===m?"off":m>=this.config.temperature.hot_above?"heating":"cooling",$=a?.pump_entity?this.on(a.pump_entity):x,w=$&&"b"!==u,v=$&&"b"===u,_=this.num(this.config.dhw_tank?.temp_entity),b=h&&"b"===d,M="b"===d?"dhw":"off",k=y?l:"off",A="b"!==u?g:"off",H="b"===u?g:"off",E=y&&h||b,S=r[0],C=r[1],P=qt(vt,"supply"),O=qt(vt,"return"),T=qt(_t,"supply"),L=qt(_t,"return"),U=qt(bt,"ab"),q=qt(bt,"a"),N=qt(bt,"b"),z=qt(Mt,"primary_in"),R=qt(Mt,"primary_out"),V=qt(Mt,"secondary_out"),j=qt(Mt,"secondary_in"),D=qt(kt,"coil_in"),Q=qt(kt,"coil_out"),Z=qt(At,"ab"),W=qt(At,"a"),K=qt(At,"b"),F=qt(Ht,"left"),J=qt(Ht,"right"),G=qt(Et,"in"),Y=qt(Et,"out"),X=qt(St,"left"),tt=qt(St,"right"),et=qt(Ct,"left"),st=qt(Ct,"right"),it=qt(Pt,"in"),at=qt(Pt,"out"),rt=qt(Ot,"left"),lt=qt(Ot,"right"),nt=s?L[1]:R[1];return B`
+      </g>`}caption(t,e,s,i="middle"){return I`<text class="caption" x="${t}" y="${e}" text-anchor="${i}">${s}</text>`}sensor(t,e,s,i,a,r){if(!i)return I``;const l=.42,n=this.symbol({name:"pipe-temperature-sensor",x:t-50.4,y:e-55.86,s:l},`sensor-${i.replace(/\W/g,"_")}`,{mode:a,state:this.available(i)?"active":"unavailable",temp:s,entity:i,label:i});return I`<g class="pipe-sensor ${"return"===r?"on-return":""}">${n}</g>`}updated(t){this.renderRoot.querySelectorAll("svg.hp-part[data-temp]").forEach(t=>{const e=t.querySelector('[data-value="temperature"]');e&&(e.textContent=t.dataset.temp||"—")})}render(){if(!this.config||!this.hass)return B``;const t="pump"===this.config.view&&this.config.heat_pump?[this.config.heat_pump]:this.config.heat_pumps||[],e=t[0],s=t[1],i=!(!e?.dhw_valve_entity||!this.config.dhw_tank),a=this.config.distribution,r=a?.circuits||[],l=this.modeOf(e),n=this.modeOf(s),c=this.stateOf(e),o=this.stateOf(s),h="active"===c&&this.on(e?.running_entity),p="active"===o&&this.on(s?.running_entity),d=e?.flow_entity?"unavailable"!==c&&this.on(e.flow_entity):h,u=s?.flow_entity?"unavailable"!==o&&this.on(s.flow_entity):p,y=i?this.on(e.dhw_valve_entity)?"b":"a":"unknown",f=a?.valve_entity?this.on(a.valve_entity)?"b":"a":"unknown",x="b"!==y,m=x&&d?l:u?n:x&&"off"!==l?l:n,g=x&&d||u,$=this.num(this.config.buffer?.temp_entity),w=g?m:void 0===$?"off":$>=this.config.temperature.hot_above?"heating":"cooling",v=a?.pump_entity?this.on(a.pump_entity):g,_=v&&"b"!==f,b=v&&"b"===f,M=this.num(this.config.dhw_tank?.temp_entity),k=d&&"b"===y,A="b"===y?"dhw":"off",H=x?l:"off",E="b"!==f?w:"off",S="b"===f?w:"off",C=x&&d||k,P=r[0],O=r[1],T=qt(vt,"supply"),L=qt(vt,"return"),U=qt(_t,"supply"),q=qt(_t,"return"),N=qt(bt,"ab"),z=qt(bt,"a"),R=qt(bt,"b"),V=qt(Mt,"primary_in"),j=qt(Mt,"primary_out"),D=qt(Mt,"secondary_out"),Q=qt(Mt,"secondary_in"),Z=qt(kt,"coil_in"),W=qt(kt,"coil_out"),K=qt(At,"ab"),F=qt(At,"a"),J=qt(At,"b"),G=qt(Ht,"left"),Y=qt(Ht,"right"),X=qt(Et,"in"),tt=qt(Et,"out"),et=qt(St,"left"),st=qt(St,"right"),it=qt(Ct,"left"),at=qt(Ct,"right"),rt=qt(Pt,"in"),lt=qt(Pt,"out"),nt=qt(Ot,"left"),ct=qt(Ot,"right"),ot=s?q[1]:j[1];return B`
       <ha-card>
         ${this.config.title?B`<h1 class="card-header">${this.config.title}</h1>`:""}
         <div class="wrap">
           <svg viewBox="0 0 ${Tt} ${Lt}" xmlns="http://www.w3.org/2000/svg">
 
             <!-- returns first, supplies on top -->
-            ${this.pipe(`M ${R[0]} ${R[1]} ${i?Nt(N[0],R[1]):""} L 290 ${R[1]}\n               L 290 ${O[1]} L ${P[0]} ${O[1]}`,"return",l,E,"buffer-to-hp2")}
-            ${s?this.pipe(`M 290 ${R[1]} L 290 ${L[1]} L ${T[0]} ${L[1]}`,"return",n,p,"trunk-to-hp1"):I``}
-            ${i?this.pipe(`M ${Q[0]} ${Q[1]} L 290 ${Q[1]} L 290 ${nt}`,"return",M,b,"dhw-to-trunk"):I``}
-            ${this.pipe(`M ${Y[0]} ${Y[1]} L ${tt[0]+17} ${Y[1]} L ${tt[0]+17} ${tt[1]} L ${tt[0]} ${tt[1]}`,"return",A,w,"fancoil-return")}
-            ${this.pipe(`M ${X[0]} ${X[1]} ${Nt(K[0],X[1])} L 800 ${X[1]} L 800 ${j[1]} L ${j[0]} ${j[1]}`,"return",g,w||v,"fcmanifold-to-buffer")}
-            ${this.pipe(`M ${at[0]} ${at[1]} L ${at[0]+20} ${at[1]} L ${at[0]+20} ${lt[1]} L ${lt[0]} ${lt[1]}`,"return",H,v,"floor-return")}
-            ${this.pipe(`M ${rt[0]} ${rt[1]} L 800 ${rt[1]} L 800 ${X[1]}`,"return",H,v,"flmanifold-to-trunk")}
+            ${this.pipe(`M ${j[0]} ${j[1]} ${i?Nt(R[0],j[1]):""} L 290 ${j[1]}\n               L 290 ${L[1]} L ${T[0]} ${L[1]}`,"return",l,C,"buffer-to-hp2")}
+            ${s?this.pipe(`M 290 ${j[1]} L 290 ${q[1]} L ${U[0]} ${q[1]}`,"return",n,u,"trunk-to-hp1"):I``}
+            ${i?this.pipe(`M ${W[0]} ${W[1]} L 290 ${W[1]} L 290 ${ot}`,"return",A,k,"dhw-to-trunk"):I``}
+            ${this.pipe(`M ${tt[0]} ${tt[1]} L ${st[0]+17} ${tt[1]} L ${st[0]+17} ${st[1]} L ${st[0]} ${st[1]}`,"return",E,_,"fancoil-return")}
+            ${this.pipe(`M ${et[0]} ${et[1]} ${Nt(J[0],et[1])} L 800 ${et[1]} L 800 ${Q[1]} L ${Q[0]} ${Q[1]}`,"return",w,_||b,"fcmanifold-to-buffer")}
+            ${this.pipe(`M ${lt[0]} ${lt[1]} L ${lt[0]+20} ${lt[1]} L ${lt[0]+20} ${ct[1]} L ${ct[0]} ${ct[1]}`,"return",S,b,"floor-return")}
+            ${this.pipe(`M ${nt[0]} ${nt[1]} L 800 ${nt[1]} L 800 ${et[1]}`,"return",S,b,"flmanifold-to-trunk")}
 
             <!-- supplies -->
             ${i?I`
-              ${this.pipe(`M ${P[0]} ${P[1]} L ${U[0]} ${U[1]}`,"supply",l,h,"hp2-to-sv1")}
-              ${this.pipe(`M ${q[0]} ${q[1]} L ${s?Ut:z[0]} ${q[1]}`,"supply",k,y&&h,"sv1-to-join")}
-              ${this.pipe(`M ${N[0]} ${N[1]} L ${N[0]} ${D[1]} L ${D[0]} ${D[1]}`,"supply",M,b,"sv1-to-dhw")}
-            `:this.pipe(`M ${P[0]} ${P[1]} L ${s?Ut:z[0]} ${P[1]}`,"supply",l,h,"hp2-to-join")}
+              ${this.pipe(`M ${T[0]} ${T[1]} L ${N[0]} ${N[1]}`,"supply",l,d,"hp2-to-sv1")}
+              ${this.pipe(`M ${z[0]} ${z[1]} L ${s?Ut:V[0]} ${z[1]}`,"supply",H,x&&d,"sv1-to-join")}
+              ${this.pipe(`M ${R[0]} ${R[1]} L ${R[0]} ${Z[1]} L ${Z[0]} ${Z[1]}`,"supply",A,k,"sv1-to-dhw")}
+            `:this.pipe(`M ${T[0]} ${T[1]} L ${s?Ut:V[0]} ${T[1]}`,"supply",l,d,"hp2-to-join")}
             ${s?I`
-              ${this.pipe(`M 560 ${q[1]} L ${z[0]} ${z[1]}`,"supply",f,x,"join-to-buffer")}
-              ${this.pipe(`M ${T[0]} ${T[1]} L 560 ${T[1]} L 560 ${q[1]}`,"supply",n,p,"hp1-riser")}
+              ${this.pipe(`M 560 ${z[1]} L ${V[0]} ${V[1]}`,"supply",m,g,"join-to-buffer")}
+              ${this.pipe(`M ${U[0]} ${U[1]} L 560 ${U[1]} L 560 ${z[1]}`,"supply",n,u,"hp1-riser")}
             `:I``}
-            ${this.pipe(`M ${V[0]} ${V[1]} L ${Z[0]} ${Z[1]}`,"supply",g,$,"buffer-to-sv2")}
-            ${this.pipe(`M ${W[0]} ${W[1]} L ${F[0]} ${F[1]}`,"supply",A,w,"sv2-to-fcmanifold")}
-            ${this.pipe(`M ${J[0]} ${J[1]} L ${G[0]} ${G[1]}`,"supply",A,w,"fcmanifold-to-fancoil")}
-            ${this.pipe(`M ${K[0]} ${K[1]} L ${K[0]} ${et[1]} L ${et[0]} ${et[1]}`,"supply",H,v,"sv2-to-flmanifold")}
-            ${this.pipe(`M ${st[0]} ${st[1]} L ${it[0]} ${it[1]}`,"supply",H,v,"flmanifold-to-floor")}
+            ${this.pipe(`M ${D[0]} ${D[1]} L ${K[0]} ${K[1]}`,"supply",w,v,"buffer-to-sv2")}
+            ${this.pipe(`M ${F[0]} ${F[1]} L ${G[0]} ${G[1]}`,"supply",E,_,"sv2-to-fcmanifold")}
+            ${this.pipe(`M ${Y[0]} ${Y[1]} L ${X[0]} ${X[1]}`,"supply",E,_,"fcmanifold-to-fancoil")}
+            ${this.pipe(`M ${J[0]} ${J[1]} L ${J[0]} ${it[1]} L ${it[0]} ${it[1]}`,"supply",S,b,"sv2-to-flmanifold")}
+            ${this.pipe(`M ${at[0]} ${at[1]} L ${rt[0]} ${rt[1]}`,"supply",S,b,"flmanifold-to-floor")}
 
             <!-- equipment -->
             ${this.symbol(vt,"hp-2",{mode:l,state:c,running:h,entity:e?.mode_entity,label:e?.name||"HP 2"})}
             ${s?this.symbol(_t,"hp-1",{mode:n,state:o,running:p,entity:s.mode_entity,label:s.name||"HP 1"}):I``}
-            ${i?this.symbol(bt,"sv-1",{mode:l,state:"active",running:h,position:d,entity:e.dhw_valve_entity,label:"SV1"}):I``}
-            ${this.symbol(Mt,"buffer",{mode:g,state:this.config.buffer?.temp_entity&&!this.available(this.config.buffer.temp_entity)?"unavailable":"active",running:x||$,temp:m,entity:this.config.buffer?.temp_entity,label:this.config.buffer?.name||"Buffer"})}
-            ${i?this.symbol(kt,"dhw",{mode:"dhw",state:this.available(this.config.dhw_tank.temp_entity)?"active":"unavailable",running:b,temp:_,entity:this.config.dhw_tank.temp_entity,label:this.config.dhw_tank.name||"DHW"}):I``}
-            ${this.symbol(At,"sv-2",{mode:g,state:"unknown"===u?"unavailable":"active",running:$,position:u,entity:a?.valve_entity,label:a?.valve_name||"SV2"})}
-            ${this.symbol(Ht,"fc-supply",{mode:A,running:w})}
-            ${this.symbol(St,"fc-return",{mode:A,running:w})}
-            ${this.symbol(Et,"fan-coil",{mode:A,running:w,entity:S?.power_entity,label:S?.name||"Fan coils"})}
-            ${this.symbol(Ct,"fl-supply",{mode:H,running:v})}
-            ${this.symbol(Ot,"fl-return",{mode:H,running:v})}
-            ${this.symbol(Pt,"floor",{mode:H,running:v,entity:C?.power_entity,label:C?.name||"Underfloor"})}
+            ${i?this.symbol(bt,"sv-1",{mode:l,state:"active",running:d,position:y,entity:e.dhw_valve_entity,label:"SV1"}):I``}
+            ${this.symbol(Mt,"buffer",{mode:w,state:this.config.buffer?.temp_entity&&!this.available(this.config.buffer.temp_entity)?"unavailable":"active",running:g||v,temp:$,entity:this.config.buffer?.temp_entity,label:this.config.buffer?.name||"Buffer"})}
+            ${i?this.symbol(kt,"dhw",{mode:"dhw",state:this.available(this.config.dhw_tank.temp_entity)?"active":"unavailable",running:k,temp:M,entity:this.config.dhw_tank.temp_entity,label:this.config.dhw_tank.name||"DHW"}):I``}
+            ${this.symbol(At,"sv-2",{mode:w,state:"unknown"===f?"unavailable":"active",running:v,position:f,entity:a?.valve_entity,label:a?.valve_name||"SV2"})}
+            ${this.symbol(Ht,"fc-supply",{mode:E,running:_})}
+            ${this.symbol(St,"fc-return",{mode:E,running:_})}
+            ${this.symbol(Et,"fan-coil",{mode:E,running:_,entity:P?.power_entity,label:P?.name||"Fan coils"})}
+            ${this.symbol(Ct,"fl-supply",{mode:S,running:b})}
+            ${this.symbol(Ot,"fl-return",{mode:S,running:b})}
+            ${this.symbol(Pt,"floor",{mode:S,running:b,entity:O?.power_entity,label:O?.name||"Underfloor"})}
 
             <!-- pipe temperatures, clamp-on sensors sitting on the pipes -->
-            ${this.sensor(286,P[1],this.num(e?.outlet_temp_entity),e?.outlet_temp_entity,l,"supply")}
-            ${this.sensor(264,O[1],this.num(e?.return_temp_entity),e?.return_temp_entity,l,"return")}
-            ${s?this.sensor(300,T[1],this.num(s.outlet_temp_entity),s.outlet_temp_entity,n,"supply"):I``}
-            ${s?this.sensor(264,L[1],this.num(s.return_temp_entity),s.return_temp_entity,n,"return"):I``}
-            ${this.sensor(F[0]-60,F[1],this.num(S?.supply_temp_entity),S?.supply_temp_entity,A,"supply")}
-            ${this.sensor(X[0]-30,X[1],this.num(S?.return_temp_entity),S?.return_temp_entity,A,"return")}
-            ${this.sensor(et[0]-60,et[1],this.num(C?.supply_temp_entity),C?.supply_temp_entity,H,"supply")}
-            ${this.sensor(rt[0]-60,rt[1],this.num(C?.return_temp_entity),C?.return_temp_entity,H,"return")}
+            ${this.sensor(286,T[1],this.num(e?.outlet_temp_entity),e?.outlet_temp_entity,l,"supply")}
+            ${this.sensor(264,L[1],this.num(e?.return_temp_entity),e?.return_temp_entity,l,"return")}
+            ${s?this.sensor(300,U[1],this.num(s.outlet_temp_entity),s.outlet_temp_entity,n,"supply"):I``}
+            ${s?this.sensor(264,q[1],this.num(s.return_temp_entity),s.return_temp_entity,n,"return"):I``}
+            ${this.sensor(G[0]-60,G[1],this.num(P?.supply_temp_entity),P?.supply_temp_entity,E,"supply")}
+            ${this.sensor(et[0]-30,et[1],this.num(P?.return_temp_entity),P?.return_temp_entity,E,"return")}
+            ${this.sensor(it[0]-60,it[1],this.num(O?.supply_temp_entity),O?.supply_temp_entity,S,"supply")}
+            ${this.sensor(nt[0]-60,nt[1],this.num(O?.return_temp_entity),O?.return_temp_entity,S,"return")}
 
             <!-- captions -->
             ${this.caption(vt.x+120,vt.y+26,e?.name||"HP 2")}
             ${s?this.caption(_t.x+120,_t.y+26,s.name||"HP 1"):I``}
-            ${i?this.caption(U[0]+85,bt.y+14,"SV1"):I``}
-            ${this.caption(Z[0]+85,At.y+14,a?.valve_name||"SV2")}
-            ${this.caption(Et.x+120,Et.y+178,S?.name||"Fan coils")}
-            ${this.caption(Pt.x+120,Pt.y+180,C?.name||"Underfloor")}
+            ${i?this.caption(N[0]+85,bt.y+14,"SV1"):I``}
+            ${this.caption(K[0]+85,At.y+14,a?.valve_name||"SV2")}
+            ${this.caption(Et.x+120,Et.y+178,P?.name||"Fan coils")}
+            ${this.caption(Pt.x+120,Pt.y+180,O?.name||"Underfloor")}
 
-            <text class="version" x="${Tt-8}" y="16" text-anchor="end">v${"0.5.1"}</text>
+            <text class="version" x="${Tt-8}" y="16" text-anchor="end">v${"0.6.0"}</text>
           </svg>
         </div>
       </ha-card>
