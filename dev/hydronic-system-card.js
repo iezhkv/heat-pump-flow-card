@@ -18,7 +18,7 @@ var HydronicSystemCard=function(t){"use strict";function e(t,e,i,s){var r,o=argu
               fill="#eef2f5" stroke="#1f2933" stroke-width="1.5"/>
         <path d="M ${t+9*r} ${e-10} L ${t+9*r} ${e+10}"
               stroke="#eef2f5" stroke-width="2.5" stroke-linecap="round"/>
-      </g>`}tank(t,e,i){const s=this.num(t?.temp_entity),r=this.resolve(t?.min_temp,10),o=this.resolve(t?.max_temp,55)-r,n=void 0===s||o<=0?0:(s-r)/o,h=Math.max(0,Math.min(1,n)),a=!1!==t?.hot?this.config.temperature.hot_color:this.config.temperature.cold_color,{x:l,y:c,w:p,h:d}=e,$=l+12,u=c+34,f=p-24,y=d-54,m=y/10,_=[];for(let t=0;t<10;t++){const e=t/9,i=(10-t)/10<=h+.001;_.push(W`<rect x="${$}" y="${u+t*m}" width="${f}" height="${m-1}"
+      </g>`}tank(t,e,i){const s=this.num(t?.temp_entity),r=this.resolve(t?.min_temp,10),o=this.resolve(t?.max_temp,55)-r,n=void 0===s||o<=0?0:(s-r)/o,h=Math.max(0,Math.min(1,n)),a=void 0===t?.hot?this.pipeColor(s):t.hot?this.config.temperature.hot_color:this.config.temperature.cold_color,{x:l,y:c,w:p,h:d}=e,$=l+12,u=c+34,f=p-24,y=d-54,m=y/10,_=[];for(let t=0;t<10;t++){const e=t/9,i=(10-t)/10<=h+.001;_.push(W`<rect x="${$}" y="${u+t*m}" width="${f}" height="${m-1}"
         fill="${a}" opacity="${i?.85-.45*e:.08}"/>`)}return W`
       <g>
         <rect x="${l}" y="${c}" width="${p}" height="${d}" rx="16" fill="#2b3742" stroke="#1f2933" stroke-width="2"/>
