@@ -15,7 +15,7 @@ var HeatPumpKitCards=function(t){"use strict";function e(t,e,s,i){var a,r=argume
       ha-card { overflow: hidden; }
       .wrap { padding: 8px; }
       svg { width: 100%; height: auto; display: block; touch-action: none; }
-    `],e([xt({attribute:!1})],t.HpKitHeatPumpCard.prototype,"hass",void 0),e([mt()],t.HpKitHeatPumpCard.prototype,"config",void 0),t.HpKitHeatPumpCard=e([dt("hp-kit-heat-pump-card")],t.HpKitHeatPumpCard);const Ct="0.1.1",Pt={hp:{name:"heat-pump",x:0,y:30,s:.7},pump:{name:"circulation-pump",x:360,y:56.8,s:.4},sv1:{name:"sv1",x:480,y:8,s:1},buffer:{name:"buffer-tank",x:720,y:35,s:1},dhw:{name:"dhw-tank",x:560,y:250,s:1}};function Ot(t,e){const s=Mt[t.name]?.[e];if(!s)throw new Error(`${t.name} has no port ${e}`);return[t.x+s[0]*t.s,t.y+s[1]*t.s]}return t.HpKitHeatPumpLoopCard=class extends ht{constructor(){super(...arguments),this.panel=new St(this)}static getStubConfig(){return{heat_pump:{name:"Heat pump",mode_entity:"",mode_select_entity:"",setpoint_entity:"",running_entity:"",flow_entity:"",pump_entity:""},buffer:{temp_entity:""}}}setConfig(t){if(!t||!t.heat_pump)throw new Error("heat_pump is required");this.config={...t},this.panel.setConfig(t.heat_pump)}getCardSize(){return this.config?.dhw?6:4}connectedCallback(){super.connectedCallback(),this.panel.connect()}disconnectedCallback(){this.panel.disconnect(),super.disconnectedCallback()}symbol(t,e,s){const i=_t[t.name];if(!i)throw new Error(`unknown kit symbol ${t.name}`);const[a,r]=kt[t.name]||[240,180],n=!!s.entity&&"heat-pump"!==t.name;return Q`
+    `],e([xt({attribute:!1})],t.HpKitHeatPumpCard.prototype,"hass",void 0),e([mt()],t.HpKitHeatPumpCard.prototype,"config",void 0),t.HpKitHeatPumpCard=e([dt("hp-kit-heat-pump-card")],t.HpKitHeatPumpCard);const Ct="0.1.2",Pt=100,Ot={hp:{name:"heat-pump",x:0,y:30,s:.7},pump:{name:"circulation-pump",x:335,y:56.8,s:.4},sv1:{name:"sv1",x:440,y:Pt-92*.8,s:.8},buffer:{name:"buffer-tank",x:600,y:35,s:1},dhw:{name:"dhw-tank",x:490,y:240,s:1}};function Tt(t,e){const s=Mt[t.name]?.[e];if(!s)throw new Error(`${t.name} has no port ${e}`);return[t.x+s[0]*t.s,t.y+s[1]*t.s]}return t.HpKitHeatPumpLoopCard=class extends ht{constructor(){super(...arguments),this.panel=new St(this)}static getStubConfig(){return{heat_pump:{name:"Heat pump",mode_entity:"",mode_select_entity:"",setpoint_entity:"",running_entity:"",flow_entity:"",pump_entity:""},buffer:{temp_entity:""}}}setConfig(t){if(!t||!t.heat_pump)throw new Error("heat_pump is required");this.config={...t},this.panel.setConfig(t.heat_pump)}getCardSize(){return this.config?.dhw?6:4}connectedCallback(){super.connectedCallback(),this.panel.connect()}disconnectedCallback(){this.panel.disconnect(),super.disconnectedCallback()}symbol(t,e,s){const i=_t[t.name];if(!i)throw new Error(`unknown kit symbol ${t.name}`);const[a,r]=kt[t.name]||[240,180],n=!!s.entity&&"heat-pump"!==t.name;return Q`
       <svg class="hp-part ${n?"clickable":""}" id="${e}"
            viewBox="0 0 ${a} ${r}" x="${t.x}" y="${t.y}" width="${a*t.s}" height="${r*t.s}"
            data-kind="${t.name}"
@@ -35,17 +35,17 @@ var HeatPumpKitCards=function(t){"use strict";function e(t,e,s,i){var a,r=argume
          data-running="${i?"true":"false"}" data-direction="forward">
         <path class="${e}" d="${t}"/>
         <path class="flow" d="${t}"/>
-      </g>`}caption(t,e,s){return Q`<text class="caption" x="${t}" y="${e}" text-anchor="middle">${s}</text>`}render(){if(!this.config||!this.hass)return B``;const t=this.config,e=t.heat_pump,s=this.panel,i=!!t.dhw,a=s.kitMode(),r=s.kitState(a),n=s.running(),l=e.flow_entity?"unavailable"!==r&&s.on(e.flow_entity):n;let o=l,c=l?"active":"off";if(e.pump_entity)if(s.available(e.pump_entity)){o=s.on(e.pump_entity);c=o&&!!e.flow_entity&&s.available(e.flow_entity)&&!l?"fault":o?"active":"off"}else o=!1,c="unavailable";const h=i&&t.dhw.valve_entity?s.on(t.dhw.valve_entity)?"b":"a":i?"unknown":"a",p="b"!==h,d=l&&p,u=l&&"b"===h,f="b"===h?"dhw":"off",x=s.num(t.buffer?.temp_entity),m=t.buffer?.hot_above??25,y=d?a:void 0===x?"off":x>=m?"heating":"cooling",g=s.num(t.dhw?.temp_entity),v=Ot(Pt.hp,"supply"),w=Ot(Pt.hp,"return"),b=Ot(Pt.pump,"in"),$=Ot(Pt.pump,"out"),_=Ot(Pt.sv1,"ab"),k=Ot(Pt.sv1,"a"),M=Ot(Pt.sv1,"b"),A=Ot(Pt.buffer,"primary_in"),S=Ot(Pt.buffer,"primary_out"),H=Ot(Pt.dhw,"coil_in"),E=Ot(Pt.dhw,"coil_out"),C=i?Pt.dhw.y+180+10:Pt.hp.y+210+10;return B`
+      </g>`}caption(t,e,s){return Q`<text class="caption" x="${t}" y="${e}" text-anchor="middle">${s}</text>`}render(){if(!this.config||!this.hass)return B``;const t=this.config,e=t.heat_pump,s=this.panel,i=!!t.dhw,a=s.kitMode(),r=s.kitState(a),n=s.running(),l=e.flow_entity?"unavailable"!==r&&s.on(e.flow_entity):n;let o=l,c=l?"active":"off";if(e.pump_entity)if(s.available(e.pump_entity)){o=s.on(e.pump_entity);c=o&&!!e.flow_entity&&s.available(e.flow_entity)&&!l?"fault":o?"active":"off"}else o=!1,c="unavailable";const h=i&&t.dhw.valve_entity?s.on(t.dhw.valve_entity)?"b":"a":i?"unknown":"a",p="b"!==h,d=l&&p,u=l&&"b"===h,f="b"===h?"dhw":"off",x=s.num(t.buffer?.temp_entity),m=t.buffer?.hot_above??25,y=d?a:void 0===x?"off":x>=m?"heating":"cooling",g=s.num(t.dhw?.temp_entity),v=Tt(Ot.hp,"supply"),w=Tt(Ot.hp,"return"),b=Tt(Ot.pump,"in"),$=Tt(Ot.pump,"out"),_=Tt(Ot.sv1,"ab"),k=Tt(Ot.sv1,"a"),M=Tt(Ot.sv1,"b"),A=Tt(Ot.buffer,"primary_in"),S=Tt(Ot.buffer,"primary_out"),H=Tt(Ot.dhw,"coil_in"),E=Tt(Ot.dhw,"coil_out"),C=i?Ot.dhw.y+180+10:Ot.hp.y+210+10;return B`
       <ha-card>
         ${t.title?B`<h1 class="card-header">${t.title}</h1>`:""}
         <div class="wrap">
-          <svg viewBox="0 0 ${970} ${C}" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 ${810} ${C}" xmlns="http://www.w3.org/2000/svg">
 
             <!-- returns first, supplies on top -->
             ${i?Q`
-              ${this.pipe(`M ${S[0]} ${S[1]} ${function(t,e,s=12){return`L ${t+s} ${e} A ${s} ${s} 0 0 1 ${t-s} ${e}`}(M[0],S[1])} L 400 ${S[1]}`,"return",p?a:"off",d,"buffer-to-junction")}
-              ${this.pipe(`M ${E[0]} ${E[1]} L 400 ${E[1]} L 400 ${S[1]}`,"return",f,u,"dhw-to-junction")}
-              ${this.pipe(`M 400 ${S[1]} L ${v[0]+14} ${S[1]} L ${w[0]} ${w[1]}`,"return",a,l,"junction-to-hp")}
+              ${this.pipe(`M ${S[0]} ${S[1]} ${function(t,e,s=12){return`L ${t+s} ${e} A ${s} ${s} 0 0 1 ${t-s} ${e}`}(M[0],S[1])} L 380 ${S[1]}`,"return",p?a:"off",d,"buffer-to-junction")}
+              ${this.pipe(`M ${E[0]} ${E[1]} L 380 ${E[1]} L 380 ${S[1]}`,"return",f,u,"dhw-to-junction")}
+              ${this.pipe(`M 380 ${S[1]} L ${v[0]+14} ${S[1]} L ${w[0]} ${w[1]}`,"return",a,l,"junction-to-hp")}
             `:this.pipe(`M ${S[0]} ${S[1]} L ${v[0]+14} ${S[1]} L ${w[0]} ${w[1]}`,"return",a,l,"buffer-to-hp")}
 
             <!-- supplies -->
@@ -57,14 +57,14 @@ var HeatPumpKitCards=function(t){"use strict";function e(t,e,s,i){var a,r=argume
             `:this.pipe(`M ${$[0]} ${$[1]} L ${A[0]-10} ${$[1]} L ${A[0]} ${A[1]}`,"supply",a,l,"pump-to-buffer")}
 
             <!-- equipment -->
-            ${this.symbol(Pt.hp,"hp",{mode:a,state:r,running:n,label:e.name||"Heat pump",speed:s.speedPeriod()})}
-            ${this.symbol(Pt.pump,"pump",{mode:a,state:c,running:o,entity:e.pump_entity||e.flow_entity,label:"Circulation pump"})}
-            ${i?this.symbol(Pt.sv1,"sv1",{mode:a,state:"unknown"===h?"unavailable":"active",running:l,position:h,entity:t.dhw.valve_entity,label:t.dhw.valve_name||"SV1"}):Q``}
-            ${this.symbol(Pt.buffer,"buffer",{mode:y,state:t.buffer?.temp_entity&&!s.available(t.buffer.temp_entity)?"unavailable":"active",running:d,temp:x,entity:t.buffer?.temp_entity,label:t.buffer?.name||"Buffer",title:t.buffer?.name})}
-            ${i?this.symbol(Pt.dhw,"dhw",{mode:"dhw",state:t.dhw.temp_entity&&!s.available(t.dhw.temp_entity)?"unavailable":"active",running:u,temp:g,entity:t.dhw.temp_entity,label:t.dhw.name||"DHW",title:t.dhw.name}):Q``}
+            ${this.symbol(Ot.hp,"hp",{mode:a,state:r,running:n,label:e.name||"Heat pump",speed:s.speedPeriod()})}
+            ${this.symbol(Ot.pump,"pump",{mode:a,state:c,running:o,entity:e.pump_entity||e.flow_entity,label:"Circulation pump"})}
+            ${i?this.symbol(Ot.sv1,"sv1",{mode:a,state:"unknown"===h?"unavailable":"active",running:l,position:h,entity:t.dhw.valve_entity,label:t.dhw.valve_name||"SV1"}):Q``}
+            ${this.symbol(Ot.buffer,"buffer",{mode:y,state:t.buffer?.temp_entity&&!s.available(t.buffer.temp_entity)?"unavailable":"active",running:d,temp:x,entity:t.buffer?.temp_entity,label:t.buffer?.name||"Buffer",title:t.buffer?.name})}
+            ${i?this.symbol(Ot.dhw,"dhw",{mode:"dhw",state:t.dhw.temp_entity&&!s.available(t.dhw.temp_entity)?"unavailable":"active",running:u,temp:g,entity:t.dhw.temp_entity,label:t.dhw.name||"DHW",title:t.dhw.name}):Q``}
 
-            ${i?this.caption(_[0]+85,Pt.sv1.y+14,t.dhw.valve_name||"SV1"):Q``}
-            <text class="version" x="${962}" y="16" text-anchor="end">v${Ct}</text>
+            ${i?this.caption(_[0]+85,Ot.sv1.y+14,t.dhw.valve_name||"SV1"):Q``}
+            <text class="version" x="${802}" y="16" text-anchor="end">v${Ct}</text>
           </svg>
         </div>
       </ha-card>
